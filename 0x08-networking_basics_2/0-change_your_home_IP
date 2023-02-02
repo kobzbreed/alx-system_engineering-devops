@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Modifying the /etc/hosts file
+
+# test
+# cp old_host hosts.new
+
+cp /etc/hosts hosts.new
+cp /etc/hosts hosts.old
+
+#Add host name address
+sed -i $'s/127.0.0.1\s*localhost//g' ./hosts.new
+echo $'127.0.0.2\tlocalhost' >> ./hosts.new
+
+# Add facebook address
+sed '/facebook.com/d' ./hosts.new
+echo $'8.8.8.8\t\tfacebook.com' >> ./hosts.new
+
+cp -f hosts.new /etc/hosts
+rm hosts.new
