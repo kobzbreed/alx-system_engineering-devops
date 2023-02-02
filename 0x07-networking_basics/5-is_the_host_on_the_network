@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Ping the ip address passed to the program 5 times
+
+if [ "$1" ]; then
+	ping -c 5 "$1"
+else
+	name=$(echo "$0" | cut -d '/' -f 2)
+	echo "Usage: $name {IP_ADDRESS}"
+fi
