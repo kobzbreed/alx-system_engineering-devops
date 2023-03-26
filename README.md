@@ -1,1 +1,1 @@
-shell-permission
+configuration management
