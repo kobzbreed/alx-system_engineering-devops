@@ -1,14 +1,30 @@
 #!/usr/bin/python3
-"""Returns to-do list information for a given employee ID."""
+"""query an API endpoint"""
+
 import requests
 import sys
 
 if __name__ == "__main__":
-    url = "https://jsonplaceholder.typicode.com/"
-    user = requests.get(url + "users/{}".format(sys.argv[1])).json()
-    todos = requests.get(url + "todos", params={"userId": sys.argv[1]}).json()
+    employee_id = sys.argv[1]
+    user = requests.get(
+        'https://jsonplaceholder.typicode.com/users/{}'
+        .format(employee_id)).json()
+    all_todos = requests.get(
+        'https://jsonplaceholder.typicode.com/todos').json()
+    user_todos = [todo for todo in all_todos if user['id'] == todo['userId']]
 
-    completed = [t.get("title") for t in todos if t.get("completed") is True]
-    print("Employee {} is done with tasks({}/{}):".format(
-        user.get("name"), len(completed), len(todos)))
-    [print("\t {}".format(c)) for c in completed]
+    number_of_tasks = 0
+    for todo in user_todos:
+        number_of_tasks += 1
+
+    number_of_task_done = 0
+    for todo in user_todos:
+        if todo['completed'] is True:
+            number_of_task_done += 1
+
+    print('Employee {} is done with tasks({}/{}):'
+          .format(user['name'], number_of_task_done, number_of_tasks)
+          )
+    for todo in user_todos:
+        if todo['completed'] is True:
+            print('\t {}'.format(todo['title']))
